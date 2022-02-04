@@ -1,24 +1,19 @@
 require('dotenv').config()
 
 const express = require('express')
-const mongoose = require('mongoose')
 const { ValidationError } = require('express-validation')
+
+const { connect: connectDB } = require('./db')
 
 class App {
   constructor () {
     this.express = express()
     this.isDev = process.env.NODE_ENV !== 'production'
 
-    this.database()
+    connectDB()
     this.middlewares()
     this.routes()
     this.exception()
-  }
-
-  database () {
-    this.database = mongoose.connect(process.env.DATABASE_URI, {
-      useNewUrlParser: true
-    })
   }
 
   middlewares () {

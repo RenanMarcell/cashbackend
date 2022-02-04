@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const PurchaseSchema = new mongoose.Schema({
-  product_code: {
+  productCode: {
     type: String,
     required: true
   },
@@ -14,7 +14,7 @@ const PurchaseSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  sold_at: {
+  soldAt: {
     type: Date,
     default: Date.now
   },

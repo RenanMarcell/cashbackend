@@ -7,7 +7,7 @@ const controllers = require('./app/controllers')
 
 const routes = Router()
 
-const authMiddleware = require('./app/middlewares/auth')
+const authMiddleware = require('./app/middlewares/Auth')
 
 routes.post('/sellers/', validate(validators.Seller), handle(controllers.SellerController.store))
 routes.post('/sessions/', validate(validators.Session), handle(controllers.SessionController.store))
