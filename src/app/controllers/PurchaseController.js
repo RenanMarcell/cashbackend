@@ -1,5 +1,5 @@
 const Purchase = require('../models/Purchase')
-const { getPurchaseCashback } = require('./helpers')
+const { getPurchaseCashback } = require('../helpers/Cashback')
 
 const MAIN_CPF = '15350946056'
 
@@ -15,17 +15,18 @@ class PurchaseController {
     purchases.forEach(purchase => {
       aggregateSpend += purchase.price
       purchaseList.push({
-        product_code: purchase.product_code,
+        productCode: purchase.productCode,
         price: purchase.price,
-        sold_at: purchase.sold_at,
-        status: purchase.status
+        soldAt: purchase.soldAt,
+        status: purchase.status,
+        seller: req.userCpf
       })
     })
 
     const cashbackObj = getPurchaseCashback(aggregateSpend)
     purchaseList.forEach(purchase => {
-      purchase.cashback_percentage = cashbackObj.percentage
-      purchase.cashback_value = (purchase.price * cashbackObj.multiplier).toFixed(2)
+      purchase.cashbackPercentage = cashbackObj.percentage
+      purchase.cashbackValue = (purchase.price * cashbackObj.multiplier).toFixed(2)
     })
 
     return res.json(purchaseList)

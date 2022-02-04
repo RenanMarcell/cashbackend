@@ -2,7 +2,7 @@ module.exports = {
   env: {
     browser: true,
     commonjs: true,
-    jest: true
+    mocha: true
   },
   extends: [
     'standard'
