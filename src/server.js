@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const { ValidationError } = require('express-validation')
 
+const logger = require('./app/config/logger')
 const { connect: connectDB } = require('./db')
 
 class App {
@@ -26,11 +27,11 @@ class App {
 
   exception () {
     this.express.use(async (err, req, res, next) => {
+      logger.error(`path: ${req.path} error: ${err}`)
       if (err instanceof ValidationError) {
         return res.status(err.statusCode).json(err)
       }
 
-      console.log(err)
       return res.status(err.status || 500).json({
         error: 'Internal Server Error'
       })
