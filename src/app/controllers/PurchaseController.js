@@ -1,5 +1,7 @@
 const Purchase = require('../models/Purchase')
 const { getPurchaseCashback } = require('../helpers/Cashback')
+const logger = require('../config/logger')
+const removeSensitiveData = require('../helpers/SensitiveData')
 
 const MAIN_CPF = '15350946056'
 
@@ -29,6 +31,9 @@ class PurchaseController {
       purchase.cashbackValue = (purchase.price * cashbackObj.multiplier).toFixed(2)
     })
 
+    const purchaseListCopy = JSON.parse(JSON.stringify(purchaseList))
+    const logResponse = JSON.stringify(removeSensitiveData(purchaseListCopy, true))
+    logger.info(`path: ${req.path} response: ${logResponse}`)
     return res.json(purchaseList)
   }
 
@@ -40,6 +45,8 @@ class PurchaseController {
     }
     const purchase = await Purchase.create(dataObj)
 
+    const logResponse = JSON.stringify(removeSensitiveData(purchase.toObject()))
+    logger.info(`path: ${req.path} response: ${logResponse}`)
     return res.json(purchase)
   }
 }

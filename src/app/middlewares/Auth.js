@@ -1,12 +1,16 @@
 const jwt = require('jsonwebtoken')
-const authConfig = require('../config/auth')
 const { promisify } = require('util')
+
+const authConfig = require('../config/auth')
+const logger = require('../config/logger')
 
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization
 
   if (!authHeader) {
-    return res.status(401).json({ error: 'Token not provided' })
+    const error = 'Token not provided'
+    logger.error(error)
+    return res.status(401).json({ error })
   }
 
   const [, token] = authHeader.split(' ')
@@ -16,6 +20,8 @@ module.exports = async (req, res, next) => {
     req.userCpf = decoded.cpf
     return next()
   } catch (err) {
-    return res.status(401).json({ error: 'Token invalid' })
+    const error = 'Token invalid'
+    logger.error(error)
+    return res.status(401).json({ error })
   }
 }

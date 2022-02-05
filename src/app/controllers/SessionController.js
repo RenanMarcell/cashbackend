@@ -1,4 +1,5 @@
 const Seller = require('../models/Seller')
+const logger = require('../config/logger')
 
 class SessionController {
   async store (req, res) {
@@ -7,13 +8,18 @@ class SessionController {
     const seller = await Seller.findOne({ email })
 
     if (!seller) {
-      return res.status(400).json({ error: 'Seller not found' })
+      const error = 'Seller not found'
+      logger.error(`path: ${req.path} error: ${error}`)
+      return res.status(400).json({ error })
     }
 
     if (!await seller.compareHash(password)) {
-      return res.status(400).json({ error: 'Invalid password' })
+      const error = 'Invalid password'
+      logger.error(`path: ${req.path} error: ${error}`)
+      return res.status(400).json({ error })
     }
 
+    logger.info(`Generated token for seller ${seller.email}`)
     return res.json({ token: Seller.generateToken(seller) })
   }
 }
